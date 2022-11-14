@@ -39,7 +39,7 @@ Private firstBalance As Range
 
 Private balanceColumnsCollection As Collection
 
-Private sh As Worksheet
+Private Sh As Worksheet
 
 Private Sub Class_Initialize()
 
@@ -51,37 +51,39 @@ Private Sub Class_Initialize()
     
     ' anchor PN top left!
     Set r = Range("B4")
-    Set sh = r.Parent
+    Set Sh = r.Parent
     
     Set balanceColumnsCollection = fillBalanceColumnsCollection()
     
+    If Not balanceColumnsCollection Is Nothing Then
     
-    For Each colNum In balanceColumnsCollection
-    
-        x = r.Offset(1, 0).Row
+        For Each colNum In balanceColumnsCollection
         
-        Do
-    
-            If sh.Cells(x, colNum).Value < 0 Then
-                sh.Cells(x, colNum).Interior.Color = RGB(255, 0, 0)
-                sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
-            ElseIf sh.Cells(x, colNum + 4).Value < 0 Or sh.Cells(x, colNum).Value = 0 Then
-                sh.Cells(x, colNum).Interior.Color = RGB(255, 199, 206)
-                sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
-            ElseIf CLng(sh.Cells(x, colNum).Value) - CLng(sh.Cells(x, colNum + 1).Value) < 0 Then
-                sh.Cells(x, colNum).Interior.Color = RGB(255, 199, 206)
-                sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
-            Else
-                sh.Cells(x, colNum).Interior.Color = sh.Cells(r.Row, colNum).Interior.Color
-                sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
-            End If
+            x = r.Offset(1, 0).Row
             
-            x = x + 1
+            Do
         
-        Loop Until Trim(sh.Cells(x, colNum).Value) = ""
-        
-        
-    Next colNum
+                If Sh.Cells(x, colNum).Value < 0 Then
+                    Sh.Cells(x, colNum).Interior.Color = RGB(255, 0, 0)
+                    Sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
+                ElseIf Sh.Cells(x, colNum + 4).Value < 0 Or Sh.Cells(x, colNum).Value = 0 Then
+                    Sh.Cells(x, colNum).Interior.Color = RGB(255, 199, 206)
+                    Sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
+                ElseIf CLng(Sh.Cells(x, colNum).Value) - CLng(Sh.Cells(x, colNum + 1).Value) < 0 Then
+                    Sh.Cells(x, colNum).Interior.Color = RGB(255, 199, 206)
+                    Sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
+                Else
+                    Sh.Cells(x, colNum).Interior.Color = Sh.Cells(r.Row, colNum).Interior.Color
+                    Sh.Cells(x, colNum).Font.Color = RGB(0, 0, 0)
+                End If
+                
+                x = x + 1
+            
+            Loop Until Trim(Sh.Cells(x, colNum).Value) = ""
+            
+            
+        Next colNum
+    End If
     
     
     ' -----------------------------------------

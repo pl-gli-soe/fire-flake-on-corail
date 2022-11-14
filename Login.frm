@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} Login 
    Caption         =   "Fire Flake"
-   ClientHeight    =   2955
+   ClientHeight    =   3105
    ClientLeft      =   45
    ClientTop       =   375
    ClientWidth     =   6090
@@ -37,7 +37,22 @@ Attribute VB_Exposed = False
 'SOFTWARE.
 
 
-Private Sub BtnSubmit_Click()
+Private Sub btn2Submit_Click()
+
+    Dim login As String, pass As String
+    
+    GlobalModule.IS2510REQ = False
+    G_LOGIN = CStr(Me.TextBoxLogin.Value)
+    G_PASS = CStr(Me.TextBoxPassword.Value)
+    G_HAZARDS = CBool(Me.CheckBoxHazards.Value)
+    
+    
+    hide
+    
+    innerFromLogin
+End Sub
+
+Private Sub BtnBO_Click()
 
 
     Dim login As String, pass As String
@@ -50,6 +65,26 @@ Private Sub BtnSubmit_Click()
     
     hide
     
-    innerFromLogin
+    innerFromLoginBO
+
 End Sub
+
+Private Sub BtnSubmit_Click()
+
+
+    Dim login As String, pass As String
+    
+    GlobalModule.IS2510REQ = True
+    G_LOGIN = CStr(Me.TextBoxLogin.Value)
+    G_PASS = CStr(Me.TextBoxPassword.Value)
+    G_HAZARDS = CBool(Me.CheckBoxHazards.Value)
+    
+    
+    hide
+    
+    innerFromLogin
+
+End Sub
+
+
 

@@ -295,3 +295,231 @@ Attribute VB_Name = "V"
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' feature - added hazards into stock if checkbox value is true
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+
+' v.29
+' 2019-09-17
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'
+' ParserHandler change new class name in order and ship for sau
+'Order and ship quantity have different ecwkeyname :
+'SX order example: <td ecwkeyname="orderedQuantity">
+'<div class="ecwButtonTexteOverOrdered number ecwButtonTexteOver">0.0</div></td>
+'LU order example: <td ecwkeyname="sauOrderedQuantity">
+' <div class="number ecwButtonTexteOverSauOrdered ecwButtonTexteOver">0.0</div></td> // but this "sau" is optional!
+'
+'
+'SX ship example:
+' <td ecwkeyname="orderedQuantity"><div class="ecwButtonTexteOverOrdered number ecwButtonTexteOver">0.0</div></td>
+'LU ship example:
+' <td ecwkeyname="sauOrderedQuantity"><div class="number ecwButtonTexteOverSauOrdered ecwButtonTexteOver">0.0</div></td> // but this "sau" is optional!
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+
+' v.30
+' 2019-10-04
+' MAESTRO STOCK FIX!!!
+
+
+
+' v.31
+' fix on open on chrome from corail parts using shell
+' my custom logic for decimal point reference from register Q17
+
+
+' v.32
+' some fix with BIP param
+
+' v.33
+' initial preparation for data from 2510
+
+' v.34
+' some stuff in plt list
+
+' v.35
+' adjust input for two chars
+
+' v.5
+' duza zmiana - wrzucamy 2510 do implementacji!
+' plus dobre praktyki z wcoca
+
+' v.51
+' poprawka pod 2510 - jesli danych nie - to trzeba to ochronic
+
+
+' v.52
+' jednak milestony w koment + godzina potrzebna
+
+
+' v.53
+' wymuszanie formatu yyyy-mm-dd hh:mm
+
+' V 0.54
+' dropper 170
+'r.Offset(0, 1).AddComment txtForCmmnt
+'r.Offset(0, 1).Comment.Shape.TextFrame.AutoSize = True
+'r.Offset(0, 1).Comment.Shape.TextFrame.Characters.Font.Name = "Courier New"
+'r.Offset(0, 1).Comment.Shape.TextFrame.Characters.Font.Size = 8
+
+'v.055
+' extra spaces!
+
+
+'v.0.56
+' additional type checking in Parser class - there was some mismatches.
+
+'v0.57
+' change in class CorailItem2510 for better pasing double types
+
+
+' v.60
+' problem with hazards... added extra column (M)
+
+
+' v61
+' this version prohibits possibility of putting hazards into formula for ending balance.
+
+
+' v65
+' skip to 65 to see diff - first version with make list feature!
+' pre-list on place as helper to define regular input list
+' Make1 as main form for maintain input data initially
+
+
+' v66
+' issue with new version of the corail
+' data are not taken propetly with the macro.
+'
+' new feature : iterationOfgetData - 5 times check http request if response is not OK
+' in class HTTP Request Handler.
+
+' comments with transport details not appearing! NOK NOK NOK
+
+
+'v67
+' optiona BO as string in ICorail interface - bo stands for B-O columns which are just common data - means i want to have just lightweight info without coverage - new special button
+' errors in comments
+
+
+' v68 and 69
+' this is major issue to fix - somehow data are not downloaded correct in a few exmaples
+' so solution was simple: iterationOfgetData - was taking loop if http post was not working properly and by force and i forgot pass args param!
+
+
+'v70 krytyczna zmiana routingu
+' narazie tylko VH
+
+
+' v071
+' prototype with static recognition on plt-list for new protocal of OAuth
+
+' v072
+' KA issue - timeout issue -> re-check implementation of recursion if request was not "valid"
+
+' v073 -> fix rawstring => .rawstring
+'
+'        If POST_FLAG = "POST" Then
+'
+'            If tmpStr1 Like "*indicePage=*pageSize=*numberOfElement=*" Then
+'                iterationOfgetData = CStr(odp)
+'            Else
+'                iterationOfgetData = "" ' tryToGetDataAgain(odp, times - 1, url, login, pass, POST_FLAG, args)
+'            End If
+'
+'        Else
+'v074 -> enable retriving data from Corail without data from 2510
+
+'        Added in GlobalModule :
+'           Global IS2510REQ As Boolean
+'
+'        Added in HttpRequestHeader class:
+'           If e = BLUE And GlobalModule.IS2510REQ = True Then
+'
+'        Added in Login Form
+'           New Button "Run Fire Flake Without 2510"
+'
+'v075 -> extended horizon
+'enable retiriving data from extended coverage, thanks to generating another request to 2720
+
+'Functions that have been added:
+'getExtendedCoverage()
+'getRequestedDomExtendedHorizon()
+'getcollectonOfXtraCorailItems()
+
+'Classes added:
+'Corail, Corail_2720_Screen, CorailData, CorailDataFrom2720, CoverageItem, Dh_Handler, ICorailData, InputConfigHandler,
+'IOrderDetails, OrderItem, Parser, SuitableData2720, SuitableXtraData2720, Validator, WeeklyCoverage, XtraRqmItem, IPArser
+
+
+' to be 076 - error on parseQtyFrom2510 -var tmpstr still not having valid number
+' to be 076 - new in Parser (WCOC) and ParserHandler (FF) : Private Function focusOnSupplierName(sn As String) As String
+' to be resolved in 077 - remove classes from Weekly Coverage - 076 implementation is against DRY rule.
+
+' to be 077 - changes on 2510 logic - from now on </div and </DIV are different things - be careful - library providing DOM object are now case sensitive
+' to be 077 - test required on different machines - to be clarified
+' ParserHandler instance - issue on case sensitive : Private Function removeDivs(strWithDiv As String) As String - update on this private function
+
+
+
+
+'to be 078 - removing all classes that have been implemented from Weekly Coverage in 0.75
+'classes deleted: 'Corail, Corail_2720_Screen, CorailData, CorailDataFrom2720, CoverageItem, Dh_Handler, ICorailData, InputConfigHandler,
+'IOrderDetails, OrderItem, Parser, SuitableData2720, SuitableXtraData2720, Validator, WeeklyCoverage, XtraRqmItem, IPArser
+
+'removing data repackaging process: Weekly Coverage objects -> Fire flake objects; Creating directly New CorailItem(FF) instead of CoverageItem(WC)
+'ParserHandler:Ln 1794, 1800, 1874
+
+'Adding Weekly Coverage's atrributes to CorailItem:
+'Public sgrLine As String
+'Public clv As Double
+'Public fabPlan As Double
+'Public Total As Double
+
+'Fire Flake 0.78 -> data flow
+'CorailRunner.zdarzenie_initCorail()
+'   new CorailBlue()
+'       Parser=new ParserHanlder() //first parser
+'   .generateInnerHttpRequest()
+'       new HttpRequestHandler()
+'       .init()
+'       .braceWithDom()
+            '   .getData() // FireFlake request 2720
+            '   .getExtendedCovData()// WeeklyCoverage request 2720
+            '   Set theParser = New ParserHandler //second Parser
+                        
+            '   theParser.importPackageOfData dom.extdoc //putting WeeklyCoverage as HTMLDocument as parameter
+                    '.innerParse2720() // parsing data from weekly coverage htmldocument
+                        'Set collectonOfXtraCorailItems = New CorailIteration
+                            'Adding to collectonOfXtraCorailItems CorailItem
+            '   Set collectonOfXtraCorailItems = theParser.getConvertedDataSuitableForExcel()
+            
+            'Set collectonOfXtraCorailItems = theParser.getConvertedDataSuitableForExcel() // returns CorailIteration of CorailItems from Weekly Cov.
+            
+            'Do While Loop
+                'Set dom2510 = New DOM2510Handler
+                'dom2510.httppost() //getting data from 2510 for Fire Flake
+                
+        'Set collectonOfXtraCorailItems = req.getCollectonOfXtraCorailItems() //collectonOfXtraCorailItems As CorailIteration
+        'bringing the collection of CorailItems Form Weekly Coverage
+        
+    'Set dane = .getData() //CorailBlue method
+        'Function getDate()
+            'Parser.htmlDataIntoCovertedData(collectonOfXtraCorailItems AS CorailIteration) //invoked on first parser, use CorailIteration set 5 lines earlier
+                'collectonOfXtraCorailItems=collectonOfXtraCorailItemsBrangToMerge // corailIteration of CorailItems from Weekly Coverage
+                '.htmlTableToRawMatrix(collectonOfXtraCorailItemsBrangToMerge AS CorailIteration)
+                    'Set tmp = New ConvertedData //setting wrapper for CorailIteration
+                    'Set ii = New CorailIteration
+                        'parsing HTMLTable that comes in htmlTableToRawMatrix as parameter
+                        'i=new CorailItem()
+                    'ii.add i //creating CorailIteration of CorailItems from FireFlake
+                    
+                    'Set filteredCollectonOfXtraCorailItemsBrangToMerge = New Collection //creating collection for filtered data by sgrLine
+                    'filtering data
+                    'Reset of collectonOfXtraCorailItemsBrangToMerge.pItems to filteredCollectonOfXtraCorailItemsBrangToMerge
+                    
+                    'For loop that goes for each CorailItem in collectonOfXtraCorailItemsBrangToMerge.pItems and adds it to ii(CorailIteration of
+                    'Fire Flake CorailItems), only if date of each Weekly Cov. CorailItem is later than last date of Fire Flake CorailItem.
+                    'At the end we get a ii CorailIteration with all data.
+                    

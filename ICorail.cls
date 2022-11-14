@@ -39,7 +39,7 @@ Public Sub generateInnerHttpRequest(r As Range, plt As String, pn As String)
 
 End Sub
 
-Public Function getData() As ConvertedData
+Public Function getData(Optional BO As String) As ConvertedData
 
 End Function
 

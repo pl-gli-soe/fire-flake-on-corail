@@ -23,13 +23,13 @@ Attribute VB_Name = "Delete"
 'SOFTWARE.
 
 Public Sub deleteAllDataSheets(ictrl As IRibbonControl)
-    Dim dh As DeleteSheetsHandler
-    Set dh = New DeleteSheetsHandler
-    dh.deleteAllSheets
+    Dim DH As DeleteSheetsHandler
+    Set DH = New DeleteSheetsHandler
+    DH.deleteAllSheets
 End Sub
 
 Public Sub deleteThisSheet(ictrl As IRibbonControl)
-    Dim dh As DeleteSheetsHandler
-    Set dh = New DeleteSheetsHandler
-    dh.deleteCurrentSheet
+    Dim DH As DeleteSheetsHandler
+    Set DH = New DeleteSheetsHandler
+    DH.deleteCurrentSheet
 End Sub

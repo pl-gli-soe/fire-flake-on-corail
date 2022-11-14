@@ -39,7 +39,7 @@ Private i As Range
 Private el As Range
 Private e As E_TYPE_OF_CORAIL
 
-Private sh As Worksheet
+Private Sh As Worksheet
 Private layout As TheLayout
 
 Private sth As StatusHandler
@@ -96,6 +96,54 @@ Public Sub run(listOfPartNumbers As InputListHelper)
 End Sub
 
 
+Public Sub runBO(listOfPartNumbers As InputListHelper)
+    
+    
+    
+    Set i = listOfPartNumbers.getInputList()
+    
+    Set listaWejsciowa = listOfPartNumbers
+
+    
+    sth.init_statusbar i.Count
+    sth.show
+    
+    For Each el In i
+    
+        If Not el.EntireRow.Hidden Then
+    
+            If (Trim(el.Value) <> "") And (Trim(el.Offset(0, 1).Value) <> "") Then
+            
+    
+            
+                ' application run independently
+                ' ------------------------------------------------------------------
+    
+                
+                
+                
+                Dim runner As CorailRunner
+                Set runner = New CorailRunner
+                runner.zdarzenieBO.proceduraDoPodniesieniaEventu el, kolekcja
+                ' runner.zdarzenie.proceduraDoPodniesieniaPrzeniesieniaZawartosciKolekcji kolekcja
+                
+                'Debug.Print kolekcja.Count 'OK
+                sth.progress_increase
+                
+                Set runner = Nothing
+                
+                
+                ' ------------------------------------------------------------------
+            End If
+        
+        End If
+    Next el
+    
+    
+    sth.hide
+End Sub
+
+
 
 Public Sub putDataOnReportSheet()
 
@@ -112,13 +160,13 @@ Public Sub putDataOnReportSheet()
         Set layout = New TheLayout
         layout.setLang Int(ThisWorkbook.Sheets("register").Range("H1").Value)
         ' zapisana referencja nowego arkusza raportu ktory od teraz bedzie przechowywany w zmiennej sh typu Worksheet
-        Set sh = ThisWorkbook.Sheets.Add
+        Set Sh = ThisWorkbook.Sheets.Add
         
         
-        Set r = sh.Range("b5")
+        Set r = Sh.Range("b5")
         
         
-        Set lblR = sh.Range("B4")
+        Set lblR = Sh.Range("B4")
         Set lblR = layout.fillFirstRawLabels(lblR)
         Set lblR = layout.getDatesFromDropperAndFillLabels(lblR, kolekcja)
         
@@ -130,12 +178,57 @@ Public Sub putDataOnReportSheet()
         Dim el As DropperHandler
         For Each el In kolekcja
         
-            el.run sh, CLng(wiersz)
+            el.run Sh, CLng(wiersz)
             wiersz = wiersz + 1
         Next el
         
         
-        sh.Cells(1, 1).Value = "Report; " & CStr(Now)
+        Sh.Cells(1, 1).Value = "Report; " & CStr(Now)
+        
+    Else
+        MsgBox "Fatal error - kolekcja jakims cudem jest pusta - upewnij sie ze lista wejsciowa czesci jest prawidlowa. pozdrawiam MM."
+    End If
+End Sub
+
+Public Sub putDataOnReportSheetBO()
+
+    
+    If kolekcja.Count > 0 Then
+
+        Dim lblR As Range
+        Dim r As Range
+        
+        
+        ' layout zostaje utowrzony jednak narazie wykorzystujemy tylko i wylacznie suby
+        ' ktore wypelniaja surowym textem
+        ' dopiero nastepne metody/ suby beda tworzyc kolorwy layout
+        Set layout = New TheLayout
+        layout.setLang Int(ThisWorkbook.Sheets("register").Range("H1").Value)
+        ' zapisana referencja nowego arkusza raportu ktory od teraz bedzie przechowywany w zmiennej sh typu Worksheet
+        Set Sh = ThisWorkbook.Sheets.Add
+        
+        
+        Set r = Sh.Range("b5")
+        
+        
+        Set lblR = Sh.Range("B4")
+        Set lblR = layout.fillFirstRawLabels(lblR)
+        'Set lblR = layout.getDatesFromDropperAndFillLabels(lblR, kolekcja)
+        
+        
+        Dim wiersz As Long
+        wiersz = r.Row
+    
+    
+        Dim el As DropperHandler
+        For Each el In kolekcja
+        
+            el.run Sh, CLng(wiersz), "BO"
+            wiersz = wiersz + 1
+        Next el
+        
+        
+        Sh.Cells(1, 1).Value = "Report; " & CStr(Now)
         
     Else
         MsgBox "Fatal error - kolekcja jakims cudem jest pusta - upewnij sie ze lista wejsciowa czesci jest prawidlowa. pozdrawiam MM."
@@ -149,15 +242,15 @@ Public Sub makeLayout()
     
     
         ' ustalmy wstepnie layout bez gridu i zoom
-        layout.init sh
+        layout.init Sh
     
     
         ' mamy sh i proponuje zaczac od nowa z r as range
         Dim r As Range
-        Set r = sh.Range("B4")
+        Set r = Sh.Range("B4")
         
         With layout
-            .addDayNamesAndMergeTopDateRows sh.Range("A3").End(xlToRight)
+            .addDayNamesAndMergeTopDateRows Sh.Range("A3").End(xlToRight)
             .adjustLabelRow r
             .colourFontsOnOtherThanBalanceColumns r.Offset(0, 1)
         End With
@@ -166,6 +259,33 @@ Public Sub makeLayout()
         MsgBox "instancja kalsy TheLayout nie zostala utworzona!"
     End If
 End Sub
+
+
+Public Sub makeLayoutBO()
+    
+    If Not layout Is Nothing Then
+    
+    
+    
+        ' ustalmy wstepnie layout bez gridu i zoom
+        layout.init Sh
+    
+    
+        ' mamy sh i proponuje zaczac od nowa z r as range
+        Dim r As Range
+        Set r = Sh.Range("B4")
+        
+        With layout
+            ' .addDayNamesAndMergeTopDateRows sh.Range("A3").End(xlToRight)
+            .adjustLabelRow r
+            .colourFontsOnOtherThanBalanceColumns r.Offset(0, 1)
+        End With
+        
+    Else
+        MsgBox "instancja kalsy TheLayout nie zostala utworzona!"
+    End If
+End Sub
+
 
 
 

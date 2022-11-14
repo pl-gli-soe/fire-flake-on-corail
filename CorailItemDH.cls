@@ -1,7 +1,17 @@
-Attribute VB_Name = "GlobalFooModule"
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "CorailItemDH"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = False
+Option Explicit
+
 'The MIT License (MIT)
 '
-'Copyright (c) 2018 FORREST
+'Copyright (c) 2020 FORREST
 ' Mateusz Milewski mateusz.milewski@opel.com aka FORREST
 '
 'Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22,26 +32,11 @@ Attribute VB_Name = "GlobalFooModule"
 'OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 'SOFTWARE.
 
-Public Function getPlantName(plt) As String
-    getPlantName = ""
-    
-    Dim Sh As Worksheet
-    Set Sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
-    
-    
-    Dim r As Range
-    Set r = Sh.Range("A2")
-    Do
-    
-        If Trim(r.Value) = Trim(plt) Then
-            getPlantName = Trim(Replace(Replace(r.Offset(0, 1).Value, "Maestro", ""), "Corail", ""))
-            Exit Do
-        End If
-    
-        Set r = r.Offset(1, 0)
-    Loop Until Trim(r) = ""
-    
-    
-    
-    If getPlantName = "" Then getPlantName = plt
-End Function
+
+Public DHEO As Date
+Public dhef As Date
+Public DHAS As Date
+Public dhrq As Date
+
+' without time
+Public dhrq2 As Date

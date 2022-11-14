@@ -28,6 +28,7 @@ Attribute VB_Name = "GlobalModule"
 Global Const G_SH_NM_REG = "register"
 Global Const G_SH_NM_IN = "input"
 Global Const G_SH_NM_PLT_LIST = "plt-list"
+Global Const G_SH_NM_PRE_LIST = "pre-list"
 ' ---------------------------------------------
 
 
@@ -69,6 +70,7 @@ Global Const G_INNER_MAIN_FRAME_ID = "frmMain"
 ' ---------------------------------------------
 ' getProductSummaryRead.do?beanId=96661053ZD#
 Global Const G_URL_EXT = "getProductSummaryRead.do?beanId="
+Global Const G_URL_EXT_FOR_2510 = "getOrderViewPager.do?"
 Global Const G_MAESTRO_URL_EXT = "produit.do?methode=init&selectedcodeProduit="
 ' ---------------------------------------------
 
@@ -78,6 +80,10 @@ Global Const G_MAESTRO_URL_EXT = "produit.do?methode=init&selectedcodeProduit="
 ' ---------------------------------------------
 Global isMaestroAvail As Boolean
 ' ---------------------------------------------
+' Global Yes / No for MAESTRO
+' ---------------------------------------------
+Global IS2510REQ As Boolean
+
 
 
 ' ---------------------------------------------
@@ -99,3 +105,7 @@ Global Const G_ITEM_OFFSET_EXTENDED = 5
 Global G_LOGIN As String
 Global G_PASS As String
 Global G_HAZARDS As Boolean
+
+
+
+Global G_TEST_ARR_FOR_RESPONSE As Variant

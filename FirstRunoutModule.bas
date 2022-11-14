@@ -22,7 +22,7 @@ Attribute VB_Name = "FirstRunoutModule"
 'OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 'SOFTWARE.
 
-Public Sub firstRunoutFormulaFilling(sh As Worksheet, r As Range)
+Public Sub firstRunoutFormulaFilling(Sh As Worksheet, r As Range)
 
 
     Dim lastRow As Long, lastColumn As Long
@@ -36,7 +36,7 @@ Public Sub firstRunoutFormulaFilling(sh As Worksheet, r As Range)
     
     For x = r.Offset(1, 0).Row To lastRow
         Set fr_r = r.Parent.Cells(x, r.Offset(0, FFOC.E_COMMON_FIRST_RUNOUT).Column - 1)
-        Set calcArea = sh.Range(sh.Cells(x, FFOC.E_COMMON_FIRST_BALANCE + 1), sh.Cells(x, lastColumn))
+        Set calcArea = Sh.Range(Sh.Cells(x, FFOC.E_COMMON_FIRST_BALANCE + 1), Sh.Cells(x, lastColumn))
         fr_r.Formula = "=FirstRunout(" & calcArea.AddressLocal & ")"
     Next x
         

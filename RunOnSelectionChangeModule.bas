@@ -23,7 +23,7 @@ Attribute VB_Name = "RunOnSelectionChangeModule"
 'SOFTWARE.
 
 
-Public Sub recalcLayoutAndColors(sh As Worksheet, r As Range)
+Public Sub recalcLayoutAndColors(Sh As Worksheet, r As Range)
 
     With Application
         .enableEvents = False
@@ -31,7 +31,7 @@ Public Sub recalcLayoutAndColors(sh As Worksheet, r As Range)
         .Calculation = xlCalculationAutomatic
     End With
     
-    If sh.Cells(1, 1).Value Like "Report;*" Then
+    If Sh.Cells(1, 1).Value Like "Report;*" Then
         ' we're in report sheet so we can go on with the logic
         ' --------------------------------------------------------------------
         ''

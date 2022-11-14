@@ -39,6 +39,8 @@ Private recv As Double
 Private backlog As Double
 ' hazards == aleas in this case ;)
 Private aleas As Double
+' new 21 oct 2019
+Private blokcagesIP As Double
 
 
 Private supplier As String
@@ -49,6 +51,18 @@ Private resp As String
 
 Private cmnt1 As String
 Private cmnt2 As String
+
+
+Private generalCollectionOf2510Data As Collection
+
+
+Public Sub addCorailItem2510ToExtraCollection(ci2510 As CorailItem2510)
+    
+    If Not generalCollectionOf2510Data Is Nothing Then
+        generalCollectionOf2510Data.Add ci2510
+    End If
+End Sub
+
 
 
 Public Property Get getSupplier() As String
@@ -93,6 +107,10 @@ Public Property Get getAleas() As Double
     getAleas = CDbl(aleas)
 End Property
 
+Public Property Get getBlockagesInProgress() As Double
+    getBlockagesInProgress = CDbl(blokcagesIP)
+End Property
+
 
 Public Property Get getPN() As String
     
@@ -126,6 +144,10 @@ Public Sub setAleas(arg As Double)
     aleas = CDbl(arg)
 End Sub
 
+Public Sub setBlockagesInProgress(arg As Double)
+    blokcagesIP = CDbl(arg)
+End Sub
+
 
 Public Sub setSupplier(arg As String)
     supplier = CStr(arg)
@@ -150,6 +172,27 @@ Public Sub addItem(i As CorailItem)
     cItems.Add i
 End Sub
 
+Public Function getItemByDate(d1 As Date) As CorailItem
+
+
+    Set getItemByDate = Nothing
+
+    Dim ii As CorailItem
+    
+    For Each ii In cItems
+    
+        ' Debug.Print "iter date: " & ii.getDate() & " and from 2510 DHRQ: " & d1
+        
+        If ii.getDate() = d1 Then
+            Set getItemByDate = ii
+        End If
+    Next ii
+    
+    If getItemByDate Is Nothing Then
+        Set getItemByDate = New CorailItem
+    End If
+End Function
+
 
 Public Property Get pItems() As Collection
 
@@ -157,7 +200,11 @@ Public Property Get pItems() As Collection
 
 End Property
 
+Public Property Set pItems(colOfCorailItems As Collection)
 
+    Set cItems = colOfCorailItems
+
+End Property
 
 Private Sub Class_Initialize()
     Set cItems = New Collection
@@ -165,12 +212,16 @@ Private Sub Class_Initialize()
     recv = 0#
     backlog = 0#
     
+    
     supplier = ""
     partName = ""
     
     resp = ""
+    
+    Set generalCollectionOf2510Data = New Collection
 End Sub
 
 Private Sub Class_Terminate()
     Set cItems = Nothing
+    Set generalCollectionOf2510Data = Nothing
 End Sub
