@@ -133,12 +133,12 @@ End Function
 Private Sub aktywujPlant(plt As String, ie As InternetExplorer)
 
     Dim maestroPltUrl As String
-    Dim sh As Worksheet
-    Set sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
+    Dim Sh As Worksheet
+    Set Sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
     
     
     Dim r As Range
-    Set r = sh.Range("A2")
+    Set r = Sh.Range("A2")
     Do
         If Trim(r) = Trim(plt) Then
             maestroPltUrl = r.Offset(0, 2)
@@ -158,8 +158,8 @@ Private Function generateURL(r As Range, plt As String, pn As String) As String
     
     generateURL = ""
     
-    Dim sh As Worksheet
-    Set sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
+    Dim Sh As Worksheet
+    Set Sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
     
     
     
@@ -168,11 +168,11 @@ Private Function generateURL(r As Range, plt As String, pn As String) As String
         
         ' --------------------------------------------------------------------------------------------------------
         
-        If Trim(CStr(sh.Range("A" & CStr(i)).Value)) <> "" Then
+        If Trim(CStr(Sh.Range("A" & CStr(i)).Value)) <> "" Then
         
-            If plt = CStr(sh.Range("A" & CStr(i)).Value) Then
+            If plt = CStr(Sh.Range("A" & CStr(i)).Value) Then
             
-                generateURL = CStr(sh.Range("C" & CStr(i)).Value) & "getProductSummaryRead.do?beanId=" & CStr(pn) & "#"
+                generateURL = CStr(Sh.Range("C" & CStr(i)).Value) & "getProductSummaryRead.do?beanId=" & CStr(pn) & "#"
                 Exit For
             End If
         
@@ -189,9 +189,9 @@ Private Function generateMaestroURL(r As Range, plt As String, pn As String) As 
 
     generateMaestroURL = ""
     
-    Dim sh As Worksheet
-    Set sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
-    generateMaestroURL = CStr(sh.Range("C2")) & "/" & FFOC.G_MAESTRO_URL_EXT & CStr(pn)
+    Dim Sh As Worksheet
+    Set Sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
+    generateMaestroURL = CStr(Sh.Range("C2")) & "/" & FFOC.G_MAESTRO_URL_EXT & CStr(pn)
     
 End Function
 
@@ -520,10 +520,10 @@ End Sub
 
 Private Function getUrlFromShByAjdi(ajdi)
     
-    Dim sh As Worksheet
-    Set sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_IN)
+    Dim Sh As Worksheet
+    Set Sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_IN)
     Dim r As Range
-    Set r = sh.Range("A2")
+    Set r = Sh.Range("A2")
     
     Do
     

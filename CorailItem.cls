@@ -31,6 +31,12 @@ Attribute VB_Exposed = False
 'SOFTWARE.
 
 
+
+Public sgrLine As String
+Public clv As Double
+Public fabPlan As Double
+Public Total As Double
+
 ' date of item
 Private d As Date
 ' required qty
@@ -41,6 +47,24 @@ Public besoinsBC As Double
 Public order As Double
 ' ship - shipped Qty
 Public ship As Double
+
+Private lineFrom2510 As CorailItem2510
+Private collectionOfCorailItemsFrom2510 As Collection
+
+Public Sub addItemFrom2510(obj As CorailItem2510)
+    
+    If Not collectionOfCorailItemsFrom2510 Is Nothing Then
+        collectionOfCorailItemsFrom2510.Add obj
+    Else
+        Set collectionOfCorailItemsFrom2510 = New Collection
+        collectionOfCorailItemsFrom2510.Add obj
+    End If
+End Sub
+
+Public Function getCollection2510() As Collection
+    Set getCollection2510 = collectionOfCorailItemsFrom2510
+End Function
+
 
 
 Public Function getDate() As Date
@@ -54,11 +78,15 @@ Public Sub setDate(arg As String)
     d = CDate(arg)
 End Sub
 
+
 Public Function getStringDate() As String
 
     getStringDate = CStr(d)
 End Function
 
+Public Function getRqms() As Double
+    getRqms = pcDemand + incBc
+End Function
 
 Public Sub parseStringToDate(strD)
     
@@ -103,3 +131,10 @@ Private Function checkIfDate(strD) As Boolean
     End If
 End Function
 
+Private Sub Class_Initialize()
+    Set collectionOfCorailItemsFrom2510 = New Collection
+End Sub
+
+Private Sub Class_Terminate()
+    Set collectionOfCorailItemsFrom2510 = Nothing
+End Sub

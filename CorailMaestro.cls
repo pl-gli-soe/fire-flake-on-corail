@@ -35,17 +35,17 @@ Implements ICorail
 
 Private ieh As IEHandler
 Private req As HTTPRequestHandler
-Private parser As ParserHandler
+Private Parser As ParserHandler
 
 Private Sub Class_Initialize()
     Set ieh = Nothing
     'Set req = New HTTPRequestHandler
-    Set parser = New ParserHandler
+    Set Parser = New ParserHandler
 End Sub
 
 Private Sub Class_Terminate()
     Set ieh = Nothing
-    Set parser = Nothing
+    Set Parser = Nothing
 End Sub
 
 
@@ -76,18 +76,18 @@ Private Sub ICorail_generateInnerIE(r As Range, plt As String, pn As String)
 
 End Sub
 
-Private Function ICorail_getData() As ConvertedData
+Private Function ICorail_getData(Optional BO As String) As ConvertedData
 
     Set ICorail_getData = Nothing
     
     If Not ieh Is Nothing Then
         Set ieh.dom.iElement = tryToGetTableWithDateAndRqmsFromMaestro(ieh)
         Set ieh.dom.table = ieh.dom.iElement
-        Set ICorail_getData = parser.htmlTableToRawMatrix(ieh.dom.table, ieh.dom, MAESTRO)
+        Set ICorail_getData = Parser.htmlTableToRawMatrix(Nothing, ieh.dom.table, ieh.dom, MAESTRO)
     Else
         Set req.dom.iElement = tryToGetTableWithDateAndRqmsFromMaestroNewForHttpRequest()
         Set req.dom.table = req.dom.iElement
-        Set ICorail_getData = parser.htmlTableToRawMatrix(req.dom.table, req.dom, MAESTRO)
+        Set ICorail_getData = Parser.htmlTableToRawMatrix(Nothing, req.dom.table, req.dom, MAESTRO)
     End If
     
 End Function

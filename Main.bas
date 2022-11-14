@@ -45,6 +45,23 @@ Public Sub innerFromLogin()
     MsgBox "Gotowe!"
 End Sub
 
+Public Sub innerFromLoginBO()
+
+
+    
+    Application.enableEvents = False
+    ThisWorkbook.Sheets(FFOC.G_SH_NM_REG).Range("RUN").Value = 1
+    
+    ' --------------------------------------------------------------
+    MainBO
+    ' --------------------------------------------------------------
+    
+    ThisWorkbook.Sheets(FFOC.G_SH_NM_REG).Range("RUN").Value = 0
+    Application.enableEvents = True
+    
+    MsgBox "Gotowe!"
+End Sub
+
 Public Sub Main()
     
     ' ------------------------------------------------------------------------
@@ -67,5 +84,34 @@ Public Sub Main()
     ' ------------------------------------------------------------------------
 End Sub
 
+Public Sub MainBO()
+    
+    ' ------------------------------------------------------------------------
+    
+    Dim c As CorailHelper, i As InputListHelper
+    Set c = New CorailHelper
+    
+    
+    ' this object is an component for main object CorailHelper
+    Set i = New InputListHelper
+    c.runBO i
+    
+    c.putDataOnReportSheetBO
+    c.makeLayoutBO
+    
+    ' ! as global one : ' public sub from global module
+    FFOC.RunOnSelectionChangeModule.recalcLayoutAndColors ActiveSheet, Range("B4")
+    FFOC.FirstRunoutModule.firstRunoutFormulaFilling ActiveSheet, Range("B4")
+    
+    ' ------------------------------------------------------------------------
+End Sub
 
 
+Public Sub aQuickRun()
+
+    G_LOGIN = ""
+    G_PASS = ""
+    G_HAZARDS = False
+    
+    innerFromLogin
+End Sub

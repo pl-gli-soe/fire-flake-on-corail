@@ -51,7 +51,7 @@ Private Sub ICorail_generateInnerIE(r As Range, plt As String, pn As String)
 
 End Sub
 
-Private Function ICorail_getData() As ConvertedData
+Private Function ICorail_getData(Optional BO As String) As ConvertedData
 
     Set ICorail_getData = Nothing
     

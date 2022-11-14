@@ -37,6 +37,7 @@ Public i As HTMLInputElement
 
 Public recvInputElement As HTMLInputElement
 Public stockInputElement As HTMLInputElement
+Public extendedDays As HTMLInputElement
 Public backlogInputElement As HTMLInputElement
 Public hazardsInputElement As HTMLInputElement
 Public partNumberInput As HTMLInputElement
@@ -45,6 +46,8 @@ Public button As HTMLButtonElement
 
 Public irecvElement As IHTMLElement
 Public istockElement As IHTMLElement
+'new 21 oct 2019
+Public iBlockagesInProgress As IHTMLElement
 Public ibacklogElement As IHTMLElement
 Public ihazardsElement As IHTMLElement
 Public icoforElement As IHTMLElement
@@ -62,6 +65,7 @@ Public iElementCollection As IHTMLElementCollection
 
 Public idoc As IHTMLDocument
 Public doc As HTMLDocument
+Public extdoc As HTMLDocument
 
 Public iElement As IHTMLElement
 

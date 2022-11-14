@@ -61,11 +61,11 @@ End Sub
 
 Private Function getCorailType(str) As String
 
-    Dim sh As Worksheet
-    Set sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
+    Dim Sh As Worksheet
+    Set Sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
     
     Dim r As Range
-    Set r = sh.Range("A2")
+    Set r = Sh.Range("A2")
     Do
         If r.Value = str Then
             getCorailType = r.Offset(0, 3).Value

@@ -35,20 +35,27 @@ Attribute VB_Exposed = False
 
 Public WithEvents zdarzenie As EventHandler
 Attribute zdarzenie.VB_VarHelpID = -1
+Public WithEvents zdarzenieBO As EventHandler
+Attribute zdarzenieBO.VB_VarHelpID = -1
 
 Private kolekcjaDanych As Collection
+Private c As ICorail
 
 
 Private Sub Class_Initialize()
 
     Set zdarzenie = New EventHandler
+    Set zdarzenieBO = New EventHandler
     Set kolekcjaDanych = New Collection
+    Set kolekcjaDanychBO = New Collection
     
 End Sub
 
 Private Sub Class_Terminate()
     Set zdarzenie = Nothing
+    Set zdarzenieBO = Nothing
     Set kolekcjaDanych = Nothing
+    Set kolekcjaDanychBO = Nothing
 End Sub
 
 
@@ -60,7 +67,7 @@ Private Sub zdarzenie_initCorail(r As Range, kolekcja As Collection)
 
 
     'na bazie jednego interfejsu
-    Dim c As ICorail
+    'Dim c As ICorail
     ' converted data to wlasciwie dodatkowy boxing zabezpieczajacy iteracje coraila
     Dim dane As ConvertedData
     
@@ -141,3 +148,70 @@ End Function
 Private Sub zdarzenie_returnCollection(kolekcja As Collection)
     ' Set kolekcjaDanych = kolekcja
 End Sub
+
+Private Sub zdarzenieBO_initCorail(r As Range, kolekcja As Collection)
+
+    Set kolekcjaDanychBO = kolekcja
+
+
+    'na bazie jednego interfejsu
+    'Dim c As ICorail
+    ' converted data to wlasciwie dodatkowy boxing zabezpieczajacy iteracje coraila
+    Dim dane As ConvertedData
+    
+    Dim pn As String, plt As String, cmnt1 As String, cmnt2 As String
+    
+    
+    pn = CStr(r.Offset(0, 1).Value)
+    plt = CStr(r.Value)
+    
+    cmnt1 = CStr(r.Offset(0, 3).Value)
+    cmnt2 = CStr(r.Offset(0, 4).Value)
+    
+    
+    Dim e As E_TYPE_OF_CORAIL
+    e = defineTypeOfCorail(CStr(r.Offset(0, 2).Value))
+    
+    If e = BLUE Then
+        Set c = New CorailBlue
+    ElseIf e = ORANGE Then
+        Set c = New CorailOrange
+    ElseIf e = MANUAL Then
+        Set c = New CorailManual
+    ElseIf e = MAESTRO Then
+        ' :) pls do not comment - i will treat maestro as corail interface OK?
+        ' Set c = New CorailManual
+        Set c = New CorailMaestro
+    Else
+        Set c = Nothing
+    End If
+    
+    
+    If Not c Is Nothing Then
+    
+        With c
+            
+            ' .generateInnerIE r, CStr(plt), CStr(pn)
+            .generateInnerHttpRequest r, CStr(plt), CStr(pn)
+            Set dane = .getData("BO")
+    
+    
+    
+    
+    
+            ' add to collection
+            ' -----------------------------------------------------------------------
+            Dim dropper As New DropperHandler
+            dropper.init plt, pn, cmnt1, cmnt2, dane
+            kolekcjaDanychBO.Add dropper
+            
+            
+            ' -----------------------------------------------------------------------
+            
+            
+            ' .closeInnerIE
+    
+        End With
+    End If
+End Sub
+

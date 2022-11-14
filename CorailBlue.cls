@@ -33,24 +33,21 @@ Attribute VB_Exposed = False
 
 Implements ICorail
 
-
-
 Private ieh As IEHandler
 Private req As HTTPRequestHandler
-Private parser As ParserHandler
+Private Parser As ParserHandler
+Private collectonOfXtraCorailItems As CorailIteration
 
 
 
 Private Sub Class_Initialize()
     Set ieh = Nothing
-    'Set req = New HTTPRequestHandler
-    Set parser = New ParserHandler
+    Set Parser = New ParserHandler
 End Sub
 
 Private Sub Class_Terminate()
     Set ieh = Nothing
-    Set parser = Nothing
-    'Set req = Nothing
+    Set Parser = Nothing
 End Sub
 
 Private Sub ICorail_closeInnerIE()
@@ -64,6 +61,9 @@ Private Sub ICorail_generateInnerHttpRequest(r As Range, plt As String, pn As St
     Set req = New HTTPRequestHandler
     req.init plt, pn
     req.braceWithDom BLUE
+    
+    Set collectonOfXtraCorailItems = req.getCollectonOfXtraCorailItems()
+    
 End Sub
 
 Private Sub ICorail_generateInnerIE(r As Range, plt As String, pn As String)
@@ -80,19 +80,26 @@ Private Sub ICorail_generateInnerIE(r As Range, plt As String, pn As String)
     End If
 End Sub
 
-Private Function ICorail_getData() As ConvertedData
+Private Function ICorail_getData(Optional BO As String) As ConvertedData
+
+
+    ' optional param BO stands for flag if I just want lightweight data from column B to O
 
     If Not ieh Is Nothing Then
 
     
         Set ieh.dom.iElement = ieh.dom.doc.getElementById("tableLay")
         Set ieh.dom.table = ieh.dom.iElement
-        Set ICorail_getData = parser.htmlTableToRawMatrix(ieh.dom.table, ieh.dom, BLUE)
+        Set ICorail_getData = Parser.htmlTableToRawMatrix(collectonOfXtraCorailItems, ieh.dom.table, ieh.dom, BLUE)
     ElseIf Not req Is Nothing Then
+        
+        
         
         Set req.dom.iElement = req.dom.doc.getElementById("tableLay")
         Set req.dom.table = req.dom.iElement
-        Set ICorail_getData = parser.htmlTableToRawMatrix(req.dom.table, req.dom, BLUE)
+        ' Set ICorail_getData = parser.htmlTableToRawMatrix(req.dom.table, req.dom, BLUE)
+        
+        Set ICorail_getData = Parser.htmlDataIntoCovertedData(collectonOfXtraCorailItems, req.dom.table, req.dom, req.collectionOfDoms2510, BLUE, BO)
     Else
         Set ICorail_getData = Nothing
     End If

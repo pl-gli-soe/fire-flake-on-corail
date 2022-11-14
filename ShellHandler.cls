@@ -31,7 +31,7 @@ Attribute VB_Exposed = False
 'SOFTWARE.
 
 
-Private sh As Shell
+Private Sh As Shell
 Private shWin As ShellWindows
 Private item As InternetExplorer
 
@@ -159,14 +159,14 @@ End Function
 
 Private Sub Class_Initialize()
 
-    Set sh = New Shell
-    Set shWin = sh.Windows
+    Set Sh = New Shell
+    Set shWin = Sh.Windows
     
 End Sub
 
 Private Sub Class_Terminate()
 
-    Set sh = Nothing
+    Set Sh = Nothing
     Set shWin = Nothing
     
 End Sub

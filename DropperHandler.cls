@@ -47,187 +47,261 @@ Public Sub init(argPlt, argPn, argCmnt1, argCmnt2, argDane As ConvertedData)
 End Sub
 
 
-Public Sub run(sh As Worksheet, repRow As Long)
+Public Sub run(Sh As Worksheet, repRow As Long, Optional BO As String)
 
     Dim r As Range
     
     
     
     'pn
-    sh.Cells(repRow, 2 + FFOC.E_COMMON_PN - 1).Value = pn
+    Sh.Cells(repRow, 2 + FFOC.E_COMMON_PN - 1).Value = pn
     'plt
-    sh.Cells(repRow, 2 + FFOC.E_COMMON_PLT_CODE - 1).Value = plt
+    Sh.Cells(repRow, 2 + FFOC.E_COMMON_PLT_CODE - 1).Value = plt
     ' plt name
-    sh.Cells(repRow, 2 + FFOC.E_COMMON_PLT_NAME - 1).Value = getPlantName(plt)
+    Sh.Cells(repRow, 2 + FFOC.E_COMMON_PLT_NAME - 1).Value = getPlantName(plt)
     
     If Not dane Is Nothing Then
         ' comments
         If Trim(CStr(dane.iteration.getComment1())) <> "" Then
-            sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT1 - 1).Value = cmnt1 & ", " & CStr(dane.iteration.getComment1())
+            Sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT1 - 1).Value = cmnt1 & ", " & CStr(dane.iteration.getComment1())
         Else
-            sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT1 - 1).Value = cmnt1
+            Sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT1 - 1).Value = cmnt1
         End If
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT2 - 1).Value = cmnt2
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT2 - 1).Value = cmnt2
     Else
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT1 - 1).Value = cmnt1
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT2 - 1).Value = cmnt2
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT1 - 1).Value = cmnt1
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_CMNT2 - 1).Value = cmnt2
     End If
     
     
     
     If Not dane Is Nothing Then
         'stock + recv - hazards !!! but only when checkbox avail.
-        If FFOC.G_HAZARDS Then
+        'If FFOC.G_HAZARDS Then
+        '
+        '
+        '    ' stock depart and hazards
+        '    sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).AddComment "STOCK: " & _
+        '    CStr(CDbl(dane.iteration.getStock)) & chr(10) & _
+        '    "HAZARDS: " & CStr(CDbl(dane.iteration.getAleas))
+        '
+        '    sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).Value = CDbl(dane.iteration.getStock) + CDbl(dane.iteration.getAleas)
+        '
+        'Else
+        '    ' stock depart only
+        '    sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).Value = CDbl(dane.iteration.getStock)
+        'End If
         
+        ' ^^^^^^^^^^^^^
+        ' stock depart only - starting from version 0.6 hazards will have seperate column!
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_Hazards - 1).Value = CDbl(dane.iteration.getAleas)
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).Value = CDbl(dane.iteration.getStock)
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+        ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
         
-            ' stock depart and hazards
-            sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).AddComment "STOCK: " & _
-            CStr(CDbl(dane.iteration.getStock)) & Chr(10) & _
-            "HAZARDS: " & CStr(CDbl(dane.iteration.getAleas))
-            
-            sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).Value = CDbl(dane.iteration.getStock) + CDbl(dane.iteration.getAleas)
-            
-        Else
-            ' stock depart only
-            sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).Value = CDbl(dane.iteration.getStock)
-        End If
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_RECV - 1).Value = CDbl(dane.iteration.getRecv)
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_BACKLOG - 1).Value = CDbl(dane.iteration.getBacklog)
         
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_RECV - 1).Value = CDbl(dane.iteration.getRecv)
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_BACKLOG - 1).Value = CDbl(dane.iteration.getBacklog)
+        ' NEW 21 OCT 2019
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_Blockages_in_progress - 1).Value = dane.iteration.getBlockagesInProgress
         
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_PART_NAME - 1).Value = dane.iteration.getPartName
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_SUPPLIER - 1).Value = dane.iteration.getSupplier
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_PART_NAME - 1).Value = dane.iteration.getPartName
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_SUPPLIER - 1).Value = dane.iteration.getSupplier
         
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_RESP - 1).Value = dane.iteration.getresp
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_RESP - 1).Value = dane.iteration.getresp
         
     Else
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).Value = 0#
-        sh.Cells(repRow, 2 + FFOC.E_COMMON_BACKLOG - 1).Value = 0#
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_STOCK - 1).Value = 0#
+        Sh.Cells(repRow, 2 + FFOC.E_COMMON_BACKLOG - 1).Value = 0#
         
     End If
     
     
-    Dim item As CorailItem, gdzieJestRecvOffsetowo As Integer
-    gdzieJestRecvOffsetowo = -4
-    
-    If Not dane Is Nothing Then
+    If BO = "" Then
     
     
+        Dim item As CorailItem, gdzieJestRecvOffsetowo As Integer
+        gdzieJestRecvOffsetowo = -4
+        
+        If Not dane Is Nothing Then
         
         
-        Set r = sh.Cells(repRow, FFOC.E_COMMON_FIRST_RQM + 1)
-        i = 0
-        Do
-            dstr = CStr(r.Parent.Cells(3, r.Column).Value)
+            Dim tbInTxtBox As TableInTextBox
+            Dim txtForCmmnt As String
+            Dim ci2510 As CorailItem2510
             
-            If dstr = "" Then
-                Exit Do
-            End If
-            
-            If CDate(dstr) < Date Then
-                gdzieJestRecvOffsetowo = gdzieJestRecvOffsetowo - 4
-            End If
-            
-            If Trim(dstr) <> "" Then
-            
-                Application.enableEvents = False
-        
-                For Each item In dane.iteration.pItems
+            Set r = Sh.Cells(repRow, FFOC.E_COMMON_FIRST_RQM + 1)
+            i = 0
+            Do
+                dstr = CStr(r.Parent.Cells(3, r.Column).Value)
                 
+                If dstr = "" Then
+                    Exit Do
+                End If
                 
+                If CDate(dstr) < Date Then
+                    gdzieJestRecvOffsetowo = gdzieJestRecvOffsetowo - 4
+                End If
                 
-                    If matchDates(dstr, item.getStringDate) Then
+                If Trim(dstr) <> "" Then
+                
+                    Application.enableEvents = False
+            
+                    For Each item In dane.iteration.pItems
                     
                         
-                
-                        r.Value = CDbl(item.besoinsBC + item.besoinsPC)
-                        r.Offset(0, 1).Value = CDbl(item.order)
-                        r.Offset(0, 2).Value = CDbl(item.ship)
+                    
+                        If matchDates(dstr, item.getStringDate) Then
                         
-                        Exit For
+                            
+                    
+                            r.Value = CDbl(item.besoinsBC + item.besoinsPC)
+                            r.Offset(0, 1).Value = CDbl(item.order)
+                            r.Offset(0, 2).Value = CDbl(item.ship)
+                            
+                            
+                            If item.getCollection2510.Count > 0 Then
+                            
+                                txtForCmmnt = ""
+                            
+                                Set tbInTxtBox = New TableInTextBox
+                                With tbInTxtBox
+                                    .defineLables "ORDERED", "PICKUP", "DELIVERY", "QTY", "TYPE", "NM"
+                                    .defineSizes 20, 20, 20, 12, 12, 14
+                                    .setCols 6
+                                End With
+                                
+                                
+                                tbInTxtBox.tryToAddLineOfTheData "       DHEO         ", "       DHEF         ", _
+                                    "       DHRQ         ", "    QTY     ", "    TYPE    ", "    NM        "
+                                ' tbInTxtBox.tryToAddLineOfTheData "ORDERED", "PICKUP", "DELIVERY", "QTY", "TYPE", "NM"
+                                
+                                For Each ci2510 In item.getCollection2510
+                                    tbInTxtBox.tryToAddLineOfTheData forceChangeFormat(ci2510.dhxx.DHEO), _
+                                        forceChangeFormat(ci2510.dhxx.dhef), _
+                                        forceChangeFormat(ci2510.dhxx.dhrq), _
+                                        forceChangeFormat(ci2510.qty, True), _
+                                        forceChangeFormat(ci2510.itemType), _
+                                        forceChangeFormat(ci2510.orderNum)
+                                Next ci2510
+                                
+                                txtForCmmnt = tbInTxtBox.drawThisTable()
+                                
+                                r.Offset(0, 1).AddComment txtForCmmnt
+                                On Error Resume Next
+                                r.Offset(0, 1).Comment.Shape.TextFrame.AutoSize = True
+                                r.Offset(0, 1).Comment.Shape.TextFrame.Characters.Font.Name = "Courier New"
+                                r.Offset(0, 1).Comment.Shape.TextFrame.Characters.Font.Size = 8
+                            
+                            End If
+                            
+                            
+                            Exit For
+                        End If
+        
+                    
+                    Next item
+                
+                
+                    ' so now this line is really important from balance perspective - need to adjust it properly
+                    ' first of all need to check if it is a very first element of the item so ...
+                    ' another thing is to add recv dynamically to the today date
+                    ' Debug.Print dstr
+                    
+                    If r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) < Date Then
+                        ' -RC[-6] new on 21 oct 2019 - for Blockages_in_progress
+                        If FFOC.G_HAZARDS Then
+                            r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]+RC[-6]-RC[-7]"
+                        Else
+                            r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]-RC[-7]"
+                        End If
+                        
+                    ElseIf r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) >= Date Then
+                        r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
+                        
+                    ElseIf CDate(dstr) = Date Then
+                        ' addtionally adding dynamically recv param
+                        r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
+                        
+                    Else
+                        r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]"
+                        
                     End If
-    
+                    
+                    
+                    Application.enableEvents = True
                 
-                Next item
-            
-            
-                ' so now this line is really important from balance perspective - need to adjust it properly
-                ' first of all need to check if it is a very first element of the item so ...
-                ' another thing is to add recv dynamically to the today date
-                ' Debug.Print dstr
+                    i = i + 1
                 
-                If r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) < Date Then
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]"
-                    
-                ElseIf r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) >= Date Then
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
-                    
-                ElseIf CDate(dstr) = Date Then
-                    ' addtionally adding dynamically recv param
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
-                    
+                    Set r = r.Offset(0, G_ITEM_OFFSET)
                 Else
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]"
-                    
+                    Exit Do
+                End If
+            Loop Until CStr(dstr) = ""
+        Else
+            
+            Set r = Sh.Cells(repRow, FFOC.E_COMMON_FIRST_RQM + 1)
+            Do
+            
+                dstr = CStr(r.Parent.Cells(3, r.Column).Value)
+                
+                If dstr = "" Then
+                    Exit Do
                 End If
                 
                 
-                Application.enableEvents = True
-            
-                i = i + 1
-            
-                Set r = r.Offset(0, G_ITEM_OFFSET)
-            Else
-                Exit Do
-            End If
-        Loop Until CStr(dstr) = ""
-    Else
-        
-        Set r = sh.Cells(repRow, FFOC.E_COMMON_FIRST_RQM + 1)
-        Do
-        
-            dstr = CStr(r.Parent.Cells(3, r.Column).Value)
-            
-            If dstr = "" Then
-                Exit Do
-            End If
-            
-            
-            If CDate(dstr) < Date Then
-                gdzieJestRecvOffsetowo = gdzieJestRecvOffsetowo - 4
-            End If
-            
-            If Trim(dstr) <> "" Then
-                Application.enableEvents = False
-            
-                If r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) < Date Then
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]"
-                    
-                ElseIf r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) >= Date Then
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
-                    
-                ElseIf CDate(dstr) = Date Then
-                    ' addtionally adding dynamically recv param
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
-                    
-                Else
-                    r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]"
-                    
+                If CDate(dstr) < Date Then
+                    gdzieJestRecvOffsetowo = gdzieJestRecvOffsetowo - 4
                 End If
                 
+                If Trim(dstr) <> "" Then
+                    Application.enableEvents = False
                 
-                Application.enableEvents = True
-                Set r = r.Offset(0, G_ITEM_OFFSET)
-                
-                
-            Else
-                Exit Do
-            End If
-        Loop Until CStr(dstr) = ""
+                    If r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) < Date Then
+                        r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]"
+                        
+                    ElseIf r.Column = (FFOC.E_COMMON_FIRST_RQM + 1) And CDate(dstr) >= Date Then
+                        r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-5]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
+                        
+                    ElseIf CDate(dstr) = Date Then
+                        ' addtionally adding dynamically recv param
+                        r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]+RC[" & CStr(gdzieJestRecvOffsetowo) & "]"
+                        
+                    Else
+                        r.Offset(0, 3).FormulaR1C1 = "=RC[-1]-RC[-3]+RC[-4]"
+                        
+                    End If
+                    
+                    
+                    Application.enableEvents = True
+                    Set r = r.Offset(0, G_ITEM_OFFSET)
+                    
+                    
+                Else
+                    Exit Do
+                End If
+            Loop Until CStr(dstr) = ""
+        End If
     End If
 End Sub
 
 
+
+Private Function forceChangeFormat(xd As Variant, Optional isQty As Boolean) As String
+
+
+
+    If isQty Then
+    
+        forceChangeFormat = CStr(xd)
+        
+    ElseIf IsDate(xd) Then
+        
+        forceChangeFormat = Format(xd, "yyyy-mm-dd hh:mm")
+    Else
+        forceChangeFormat = CStr(xd)
+    End If
+End Function
 
 
 Private Function matchDates(d1 As Variant, d2 As Variant) As Boolean

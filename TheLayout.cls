@@ -43,7 +43,7 @@ Public Sub setLang(eTmp As E_LANG)
 End Sub
 
 
-Public Sub init(ByRef sh As Worksheet)
+Public Sub init(ByRef Sh As Worksheet)
     
     ActiveWindow.Zoom = 80
     ActiveWindow.DisplayGridlines = False
@@ -64,6 +64,8 @@ Public Function fillFirstRawLabels(r As Range) As Range
     r.Offset(0, FFOC.E_COMMON_CMNT2 - 1).Value = "Comment #2"
     r.Offset(0, FFOC.E_COMMON_FIRST_RUNOUT - 1).Value = "FIRST RUNOUT"
     r.Offset(0, FFOC.E_COMMON_BACKLOG - 1).Value = "Backlog"
+    r.Offset(0, FFOC.E_COMMON_Blockages_in_progress - 1).Value = "BIP"
+    r.Offset(0, FFOC.E_COMMON_Hazards - 1).Value = "Hazards"
     r.Offset(0, FFOC.E_COMMON_STOCK - 1).Value = "Stock"
     r.Offset(0, FFOC.E_COMMON_RECV - 1).Value = "Recv"
     
@@ -208,8 +210,8 @@ End Sub
 
 Private Sub mergeProperly(ByRef r As Range)
 
-    Dim sh  As Worksheet
-    Set sh = r.Parent
+    Dim Sh  As Worksheet
+    Set Sh = r.Parent
     Dim tmp As Range, tmp1 As Range, tmp2 As Range
     
     Dim toggle As Boolean
@@ -227,10 +229,10 @@ Private Sub mergeProperly(ByRef r As Range)
         
         ' cw
         tmp1.Offset(-1, 0).Value = "CW: "
-        sh.Range(tmp1.Offset(-1, 1), tmp2.Offset(-1, 1)).Merge
+        Sh.Range(tmp1.Offset(-1, 1), tmp2.Offset(-1, 1)).Merge
         
         ' date and weekday
-        sh.Range(tmp1, tmp2).Merge
+        Sh.Range(tmp1, tmp2).Merge
         
         
         
@@ -240,7 +242,7 @@ Private Sub mergeProperly(ByRef r As Range)
         
         
         If toggle Then
-            With sh.Range(tmp1.Offset(-1, 0), r)
+            With Sh.Range(tmp1.Offset(-1, 0), r)
                 .Font.Color = colors.colorMattBlack
                 .Font.Size = 10
                 .Interior.Color = RGB(255, 255, 255)
@@ -248,7 +250,7 @@ Private Sub mergeProperly(ByRef r As Range)
 
         Else
             
-            With sh.Range(tmp1.Offset(-1, 0), r)
+            With Sh.Range(tmp1.Offset(-1, 0), r)
                 .Font.Color = colors.colorMattBlack
                 .Font.Size = 10
                 .Interior.Color = colors.colorFireFlakeGrey
@@ -256,7 +258,7 @@ Private Sub mergeProperly(ByRef r As Range)
             
         End If
         
-        Me.fillSolidGridLines sh.Range(tmp1.Offset(-1, 0), r), colors.colorMattBlack
+        Me.fillSolidGridLines Sh.Range(tmp1.Offset(-1, 0), r), colors.colorMattBlack
         
         
         Set r = r.Offset(0, 1)

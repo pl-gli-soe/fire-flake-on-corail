@@ -30,9 +30,9 @@ End Sub
 
 Private Sub innerAdjustInputList()
     
-    Dim sh As Worksheet
+    Dim Sh As Worksheet
     Dim i As Worksheet
-    Set sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
+    Set Sh = ThisWorkbook.Sheets(FFOC.G_SH_NM_PLT_LIST)
     Set i = ThisWorkbook.Sheets(FFOC.G_SH_NM_IN)
     
     
@@ -42,12 +42,12 @@ Private Sub innerAdjustInputList()
     
     
     Do
-        Set pltr = sh.Range("A2")
+        Set pltr = Sh.Range("A2")
         
-        If Len(ir.Value) = 1 Or (Len(ir.Value) = 2 And IsNumeric(ir.Value)) Then
+        If Len(ir.Value) = 1 Or (Len(ir.Value) = 2) Then
         
         
-            Set pltr = sh.Range("A2")
+            Set pltr = Sh.Range("A2")
             Do
                 If ir.Value = pltr.Value Then
                     ir.Offset(0, 2).Value = pltr.Offset(0, 3).Value
@@ -64,7 +64,7 @@ Private Sub innerAdjustInputList()
         Else
             
             ' najpierw dopasuj nazwe plantu
-            Set pltr = sh.Range("A2")
+            Set pltr = Sh.Range("A2")
             
             Do
                 ptrn = CStr(UCase(Trim(Replace(Replace(CStr(pltr.Offset(0, 1).Value), "Corail", ""), "Maestro", ""))))

@@ -50,7 +50,7 @@ Public Sub deleteAllSheets()
         Application.DisplayAlerts = False
         
         
-        Dim sh As Worksheet
+        Dim Sh As Worksheet
         x = 1
         Do
             If checkIfYouCanDelete(Sheets(x)) Then
@@ -64,16 +64,19 @@ Public Sub deleteAllSheets()
 End Sub
 
 
-Private Function checkIfYouCanDelete(sh As Worksheet) As Boolean
+Private Function checkIfYouCanDelete(Sh As Worksheet) As Boolean
     
     checkIfYouCanDelete = True
     
-    If sh.Name <> FFOC.G_SH_NM_IN Then
-        If sh.Name <> FFOC.G_SH_NM_PLT_LIST Then
-            If sh.Name <> FFOC.G_SH_NM_REG Then
-                checkIfYouCanDelete = False
+    If Sh.Name <> FFOC.G_SH_NM_IN Then
+        If Sh.Name <> FFOC.G_SH_NM_PLT_LIST Then
+            If Sh.Name <> FFOC.G_SH_NM_REG Then
+                If Sh.Name <> FFOC.G_SH_NM_PRE_LIST Then
+                    checkIfYouCanDelete = False
+                End If
             End If
         End If
     End If
     
 End Function
+
